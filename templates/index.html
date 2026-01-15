@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Race Condition Tester</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body style="margin: 0; padding: 32px; font-family: Courier, monospace;">
+    <div style="max-width: 896px; margin: 0 auto;">
+        <h1 style="font-size: 30px; font-weight: bold; margin-bottom: 8px;">Race Condition</h1>
+        <p style="margin-bottom: 32px;">Enter cURL command to run race condition</p>
+
+        <div id="errorSection" style="display: none; margin-bottom: 16px; padding: 16px; background-color: #fee; border: 1px solid #fcc; border-radius: 4px;">
+            <h3 style="color: #c33; font-weight: bold; margin: 0 0 8px 0;">⚠️ Error:</h3>
+            <p id="errorMessage" style="color: #933; margin: 0; font-size: 14px;"></p>
+        </div>
+
+        <div id="validationSection" style="display: none; margin-bottom: 16px; padding: 16px; background-color: #ffd; border: 1px solid #cc9; border-radius: 4px;">
+            <h3 style="color: #995500; font-weight: bold; margin: 0 0 8px 0;">ℹ️ Input Validation:</h3>
+            <ul id="validationList" style="margin: 0; padding-left: 20px; color: #774400; font-size: 13px;"></ul>
+        </div>
+
+        <div style="margin-bottom: 32px;">
+            <form id="attackForm" style="display: flex; flex-direction: column; gap: 16px;">
+                <div>
+                    <label style="display: block; font-size: 14px; font-weight: 500; margin-bottom: 8px;">cURL Command: <span style="color: red;">*</span></label>
+                    <textarea 
+                        name="curl_command" 
+                        id="curlInput"
+                        rows="8" 
+                        placeholder="Example: curl -X GET 'https://api.example.com/endpoint'"
+                        style="width: 100%; padding: 12px; font-family: Courier, monospace; font-size: 14px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; resize: vertical;"></textarea>
+                    <p style="margin: 4px 0 0 0; font-size: 12px; color: #666;">Min 10 characters, must contain URL (http/https)</p>
+                </div>
+                
+                <div style="display: flex; gap: 16px; align-items: flex-start;">
+                    <div style="flex: 1;">
+                        <label style="display: block; font-size: 14px; font-weight: 500; margin-bottom: 4px;">Request Count: <span style="color: red;">*</span></label>
+                        <input type="number" name="count" value="20" min="1" max="1000" style="width: 100%; padding: 8px; font-family: Courier, monospace; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+                        <p style="margin: 4px 0 0 0; font-size: 12px; color: #666;">Min: 1, Max: 1000</p>
+                        <div id="loadingSection" style="display: none; margin-top: 4px;">
+                            <p style="font-weight: bold; margin: 0; font-family: Courier, monospace; color: #333;">
+                                Loading<span id="loadingDots">.</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div style="flex: 3;">
+                        <label style="display: block; font-size: 14px; font-weight: 500; margin-bottom: 4px; visibility: hidden;">.</label>
+                        <button type="submit" id="btnRun" style="width: 100%; padding: 8px 16px; border: 1px solid #333; border-radius: 4px; cursor: pointer; font-weight: bold; font-family: Courier, monospace; background-color: #f0f0f0; transition: all 0.3s;">
+                            Run Attack
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div id="resultSection" style="display: none;">
+            <h2 style="font-size: 20px; font-weight: 600; margin-bottom: 8px;">Attack Results:</h2>
+            <div style="margin-bottom: 16px; padding: 12px; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 4px;">
+                <p style="margin: 4px 0; font-size: 13px;"><strong>Target:</strong> <span id="targetUrl"></span></p>
+                <p style="margin: 4px 0; font-size: 13px;"><strong>Method:</strong> <span id="methodType"></span></p>
+                <p style="margin: 4px 0; font-size: 13px;"><strong>Total Request:</strong> <span id="totalRequest"></span></p>
+                <p style="margin: 4px 0; font-size: 13px;"><strong>Success Rate:</strong> <span id="successRate"></span></p>
+            </div>
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; font-family: Courier, monospace;">
+                    <thead>
+                        <tr style="background-color: #f5f5f5;">
+                            <th style="padding: 12px; text-align: center; width: 50px; font-weight: 600; border-bottom: 1px solid #ddd;">#</th>
+                            <th style="padding: 12px; text-align: center; width: 80px; font-weight: 600; border-bottom: 1px solid #ddd;">Status</th>
+                            <th style="padding: 12px; text-align: left; font-weight: 600; border-bottom: 1px solid #ddd;">Response Body (Preview)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resultTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
