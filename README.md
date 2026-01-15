@@ -1,6 +1,6 @@
 # Race Condition Web Tester
 
-url : https://verbose-space-parakeet-vq6vxp994p4fpwww-5000.app.github.dev/
+url : https://6c6f1dbd9a04.ngrok-free.app/
 
 ## 🚀 How to Use
 
